@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>MainActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainActivity.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.example.emergencyapp</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">androidx.annotation.NonNull</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">androidx.appcompat.app.AppCompatActivity</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">androidx.core.app.ActivityCompat</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">androidx.core.content.ContextCompat</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">android.Manifest</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.content.Context</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.content.pm.PackageManager</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.os.Bundle</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.telephony.SmsManager</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.view.View</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.widget.EditText</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">android.widget.Toast</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">MainActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity {</span>
+
+    <span class="s1">EditText txt_num</span><span class="s0">,</span><span class="s1">txt_message</span><span class="s0">;</span>
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState)</span><span class="s0">;</span>
+        <span class="s1">setContentView(R.layout.activity_main)</span><span class="s0">;</span>
+
+        <span class="s1">txt_message = (EditText)findViewById(R.id.txt_message)</span><span class="s0">;</span>
+        <span class="s1">txt_num = (EditText)findViewById(R.id.txt_phonenumber)</span><span class="s0">;</span>
+
+
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">btn_send(View view) {</span>
+
+        <span class="s0">int </span><span class="s1">permissionCheck = ContextCompat.checkSelfPermission(</span><span class="s0">this, </span><span class="s1">Manifest.permission.SEND_SMS)</span><span class="s0">;</span>
+        <span class="s0">if</span><span class="s1">(permissionCheck == PackageManager.PERMISSION_GRANTED){</span>
+
+             <span class="s1">MyMessage()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+        <span class="s0">else</span>
+        <span class="s1">{</span>
+            <span class="s1">ActivityCompat.requestPermissions(</span><span class="s0">this,new </span><span class="s1">String[]{Manifest.permission.SEND_SMS}</span><span class="s0">,</span><span class="s2">0</span><span class="s1">)</span><span class="s0">;</span>
+
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s0">private void </span><span class="s1">MyMessage() {</span>
+
+        <span class="s1">String phoneNumber = txt_num.getText().toString().trim()</span><span class="s0">;</span>
+        <span class="s1">String Message = txt_message.getText().toString().trim()</span><span class="s0">;</span>
+
+        <span class="s0">if </span><span class="s1">(!txt_num.getText().toString().equals(</span><span class="s3">&quot;&quot;</span><span class="s1">) || !txt_message.getText().toString().equals(</span><span class="s3">&quot;&quot;</span><span class="s1">)) {</span>
+            <span class="s1">SmsManager smsManager = SmsManager.getDefault()</span><span class="s0">;</span>
+            <span class="s1">smsManager.sendTextMessage(phoneNumber</span><span class="s0">, null, </span><span class="s1">Message</span><span class="s0">, null, null</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">Toast.makeText(</span><span class="s0">this, </span><span class="s3">&quot;Message Sent&quot;</span><span class="s0">, </span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s0">;</span>
+
+        <span class="s1">}</span>
+        <span class="s0">else</span><span class="s1">{</span>
+            <span class="s1">Toast.makeText(</span><span class="s0">this,</span><span class="s3">&quot;Please Enter Number or message&quot;</span><span class="s0">,</span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+
+    <span class="s1">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">onRequestPermissionsResult(</span><span class="s0">int </span><span class="s1">requestCode</span><span class="s0">, </span><span class="s1">@NonNull String[] permissions</span><span class="s0">, </span><span class="s1">@NonNull </span><span class="s0">int</span><span class="s1">[] grantResults) {</span>
+        <span class="s0">super</span><span class="s1">.onRequestPermissionsResult(requestCode</span><span class="s0">, </span><span class="s1">permissions</span><span class="s0">, </span><span class="s1">grantResults)</span><span class="s0">;</span>
+
+        <span class="s0">switch</span><span class="s1">(requestCode){</span>
+
+            <span class="s0">case </span><span class="s2">0</span><span class="s1">:</span>
+                 <span class="s0">if</span><span class="s1">(grantResults.length &gt;=</span><span class="s2">0 </span><span class="s1">&amp;&amp; grantResults[</span><span class="s2">0</span><span class="s1">] == PackageManager.PERMISSION_GRANTED){</span>
+                     <span class="s1">MyMessage()</span><span class="s0">;</span>
+                 <span class="s1">}</span>
+
+                 <span class="s0">else</span>
+                 <span class="s1">{</span>
+                     <span class="s1">Toast.makeText(</span><span class="s0">this,</span><span class="s3">&quot;You dont hve permission required&quot;</span><span class="s0">,</span><span class="s1">Toast.LENGTH_SHORT).show()</span><span class="s0">;</span>
+                 <span class="s1">}</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>
